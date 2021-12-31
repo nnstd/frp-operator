@@ -1,0 +1,507 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: frpservers.frp.gou177.cyou
+spec:
+  group: frp.gou177.cyou
+  names:
+    kind: FRPServer
+    listKind: FRPServerList
+    plural: frpservers
+    singular: frpserver
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              allowPorts:
+                title: Allowports
+                type: string
+              dashboard:
+                properties:
+                  credentials:
+                    title: Credentials
+                    type: string
+                  port:
+                    default: 7500
+                    title: Port
+                    type: integer
+                  service:
+                    default:
+                      annotations: {}
+                      labels: {}
+                      type: ClusterIP
+                    properties:
+                      allocateLoadBalancerNodePorts:
+                        title: Allocateloadbalancernodeports
+                        type: boolean
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        default: {}
+                        title: Annotations
+                        type: object
+                      labels:
+                        additionalProperties:
+                          pattern: ^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$
+                          type: string
+                        default: {}
+                        title: Labels
+                        type: object
+                      type:
+                        default: ClusterIP
+                        description: An enumeration.
+                        enum:
+                        - ClusterIP
+                        - LoadBalancer
+                        - ClusterIP
+                        - ClusterIP
+                        - ClusterIP
+                        title: ServiceType
+                        type: string
+                    title: EmbedService
+                    type: object
+                required:
+                - credentials
+                title: FRPServerDashboard
+                type: object
+              image:
+                default: snowdreamtech/frps:latest
+                title: Image
+                type: string
+              plugins:
+                default: []
+                items:
+                  properties:
+                    addr:
+                      default: 0.0.0.0
+                      title: Addr
+                      type: string
+                    name:
+                      title: Name
+                      type: string
+                    ops:
+                      title: Ops
+                      type: string
+                    path:
+                      default: /handler
+                      title: Path
+                      type: string
+                    port:
+                      default: 9000
+                      title: Port
+                      type: integer
+                  required:
+                  - name
+                  - ops
+                  title: FRPServerPlugin
+                  type: object
+                title: Plugins
+                type: array
+              ports:
+                default:
+                  kcp: 7000
+                  tcp: 7000
+                  udp: 7001
+                properties:
+                  kcp:
+                    default: 7000
+                    title: Kcp
+                    type: integer
+                  tcp:
+                    default: 7000
+                    title: Tcp
+                    type: integer
+                  udp:
+                    default: 7001
+                    title: Udp
+                    type: integer
+                title: FRPServerPorts
+                type: object
+              prometheus:
+                default: true
+                title: Prometheus
+                type: boolean
+              service:
+                default:
+                  annotations: {}
+                  labels: {}
+                  type: ClusterIP
+                properties:
+                  allocateLoadBalancerNodePorts:
+                    title: Allocateloadbalancernodeports
+                    type: boolean
+                  annotations:
+                    additionalProperties:
+                      type: string
+                    default: {}
+                    title: Annotations
+                    type: object
+                  labels:
+                    additionalProperties:
+                      pattern: ^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$
+                      type: string
+                    default: {}
+                    title: Labels
+                    type: object
+                  type:
+                    default: ClusterIP
+                    description: An enumeration.
+                    enum:
+                    - ClusterIP
+                    - LoadBalancer
+                    - ClusterIP
+                    - ClusterIP
+                    - ClusterIP
+                    title: ServiceType
+                    type: string
+                title: EmbedService
+                type: object
+              token:
+                properties:
+                  secret:
+                    title: Secret
+                    type: string
+                title: FRPServerToken
+                type: object
+              vhost:
+                properties:
+                  http:
+                    default: 80
+                    title: Http
+                    type: integer
+                  https:
+                    title: Https
+                    type: integer
+                  service:
+                    default:
+                      annotations: {}
+                      labels: {}
+                      type: ClusterIP
+                    properties:
+                      allocateLoadBalancerNodePorts:
+                        title: Allocateloadbalancernodeports
+                        type: boolean
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        default: {}
+                        title: Annotations
+                        type: object
+                      labels:
+                        additionalProperties:
+                          pattern: ^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$
+                          type: string
+                        default: {}
+                        title: Labels
+                        type: object
+                      type:
+                        default: ClusterIP
+                        description: An enumeration.
+                        enum:
+                        - ClusterIP
+                        - LoadBalancer
+                        - ClusterIP
+                        - ClusterIP
+                        - ClusterIP
+                        title: ServiceType
+                        type: string
+                    title: EmbedService
+                    type: object
+                title: FRPServerVHost
+                type: object
+            title: FRPServerSpec
+            type: object
+        required:
+        - metadata
+        - spec
+        title: FRPServer
+        type: object
+    served: true
+    storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: frpclients.frp.gou177.cyou
+spec:
+  group: frp.gou177.cyou
+  names:
+    kind: FRPClient
+    listKind: FRPClientList
+    plural: frpclients
+    singular: frpclient
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              dashboard:
+                properties:
+                  credentials:
+                    title: Credentials
+                    type: string
+                  port:
+                    default: 7400
+                    title: Port
+                    type: integer
+                  service:
+                    default:
+                      annotations: {}
+                      labels: {}
+                      type: ClusterIP
+                    properties:
+                      allocateLoadBalancerNodePorts:
+                        title: Allocateloadbalancernodeports
+                        type: boolean
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        default: {}
+                        title: Annotations
+                        type: object
+                      labels:
+                        additionalProperties:
+                          pattern: ^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$
+                          type: string
+                        default: {}
+                        title: Labels
+                        type: object
+                      type:
+                        default: ClusterIP
+                        description: An enumeration.
+                        enum:
+                        - ClusterIP
+                        - LoadBalancer
+                        - ClusterIP
+                        title: ServiceType
+                        type: string
+                    title: EmbedService
+                    type: object
+                required:
+                - credentials
+                title: FRPClientDashboard
+                type: object
+              image:
+                default: snowdreamtech/frpc:latest
+                title: Image
+                type: string
+              namespaceSelector:
+                additionalProperties:
+                  pattern: ^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$
+                  type: string
+                title: Namespaceselector
+                type: object
+              selector:
+                additionalProperties:
+                  pattern: ^(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])?$
+                  type: string
+                default: {}
+                title: Selector
+                type: object
+              sidecarImage:
+                default: registry.nonamestudio.me/gou177/frp-operator:latest
+                title: Sidecarimage
+                type: string
+              target:
+                properties:
+                  host:
+                    title: Host
+                    type: string
+                  port:
+                    default: 7000
+                    title: Port
+                    type: integer
+                  token:
+                    properties:
+                      secret:
+                        title: Secret
+                        type: string
+                    required:
+                    - secret
+                    title: FRPClientTargetToken
+                    type: object
+                required:
+                - token
+                - host
+                title: FRPClientTarget
+                type: object
+            required:
+            - target
+            title: FRPClientSpec
+            type: object
+        required:
+        - metadata
+        - spec
+        title: FRPClient
+        type: object
+    served: true
+    storage: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: frpclientendpoints.frp.gou177.cyou
+spec:
+  group: frp.gou177.cyou
+  names:
+    kind: FRPClientEndpoint
+    listKind: FRPClientEndpointList
+    plural: frpclientendpoints
+    singular: frpclientendpoint
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              bandwidthLimit:
+                title: Bandwidthlimit
+                type: string
+              compression:
+                default: false
+                title: Compression
+                type: boolean
+              encryption:
+                default: false
+                title: Encryption
+                type: boolean
+              group:
+                properties:
+                  key:
+                    title: Key
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                required:
+                - name
+                - key
+                title: FRPClientEndpointGroup
+                type: object
+              local:
+                properties:
+                  host:
+                    title: Host
+                    type: string
+                  port:
+                    title: Port
+                    type: integer
+                required:
+                - host
+                - port
+                title: FRPClientEndpointLocal
+                type: object
+              remote:
+                properties:
+                  port:
+                    title: Port
+                    type: integer
+                required:
+                - port
+                title: FRPClientEndpointRemote
+                type: object
+              type:
+                description: An enumeration.
+                enum:
+                - tcp
+                - udp
+                - http
+                - https
+                - stcp
+                - xtcp
+                title: FRPClientEndpointType
+                type: string
+            required:
+            - type
+            - remote
+            - local
+            title: FRPClientEndpointSpec
+            type: object
+        required:
+        - metadata
+        - spec
+        title: FRPClientEndpoint
+        type: object
+    served: true
+    storage: true
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: frp-operator
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: frp-operator
+status:
+  loadBalancer: {}
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4032
+  selector:
+    app: frp-operator
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: operator
+  namespace: frp-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frp-operator
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frp-operator
+    spec:
+      containers:
+        - name: operator
+          image: registry.nonamestudio.me/gou177/frp-operator:latest
+          command:
+            - python
+            - '-m'
+            - kopf
+            - run
+            - k8s_operator.py
+          ports:
+            - containerPort: 4032
+              protocol: TCP
+      serviceAccountName: operator
+      serviceAccount: operator
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: operator
+  namespace: frp-operator
+secrets:
+  - name: operator-token-5v2vm
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: frp-operator
+subjects:
+  - kind: ServiceAccount
+    name: operator
+    namespace: frp-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
