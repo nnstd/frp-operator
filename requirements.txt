@@ -1,0 +1,5 @@
+kopf==1.35.3
+fastapi==0.70.0
+uvicorn==0.15.0
+pykube-ng==21.10.0
+PyYAML==6.0
