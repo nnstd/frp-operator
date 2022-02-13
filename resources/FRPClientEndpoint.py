@@ -110,7 +110,7 @@ class FRPClientEndpointSpecHTTP(FRPClientEndpointSpecBase):
 
 class FRPClientEndpointSpec(FRPClientEndpointSpecL4, FRPClientEndpointSpecHTTP):
     type: FRPClientEndpointType
-    http: Optional[FRPClientEndpointSpecHTTP] = None
+    http: Optional[FRPClientHttp] = None
     remote: Optional[FRPClientEndpointRemote] = None
 
 
