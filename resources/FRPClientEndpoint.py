@@ -80,7 +80,7 @@ class FRPClientHttpHealthCheck(BaseModel):
 class FRPClientHttp(BaseModel):
     headers: Dict[str, str] = {}
     subdomain: Optional[str] = None
-    customDomains: Optional[str] = None
+    customDomains: Optional[List[str]] = None
     locations: Optional[List[str]] = None
     hostHeaderRewrite: Optional[str] = None
 
