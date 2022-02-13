@@ -96,9 +96,9 @@ class FRPClientEndpointSpecHTTP(FRPClientEndpointSpecBase):
         if self.http.subdomain:
             config += f"subdomain = {self.http.subdomain}\n"
         if self.http.customDomains:
-            config += f"customDomains = {','.join(self.http.customDomains)}\n"
+            config += f"custom_domains = {','.join(self.http.customDomains)}\n"
         if self.http.locations:
-            config += f"customDomains = {','.join(self.http.locations)}\n"
+            config += f"locations = {','.join(self.http.locations)}\n"
         if self.http.hostHeaderRewrite:
             config += f"host_header_rewrite = {self.http.hostHeaderRewrite}\n"
 
