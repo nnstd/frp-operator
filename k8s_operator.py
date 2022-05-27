@@ -41,8 +41,16 @@ class FRPCSecretConfig(SecretData):
     config: str = Field(alias="frpc.ini")
 
 
-@kopf.on.create("frp.gou177.cyou/v1", "FRPServer")
-@kopf.on.field("frp.gou177.cyou/v1", "FRPServer", field="spec.token")  # type: ignore
+@kopf.on.startup()  # type: ignore
+def configure(settings: kopf.OperatorSettings, **_):
+    settings.persistence.finalizer = "frp.nonamestudio.me/finalizer"
+    settings.persistence.progress_storage = kopf.AnnotationsProgressStorage(
+        prefix="frp.nonamestudio.me"
+    )
+
+
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPServer")
+@kopf.on.field("frp.nonamestudio.me/v1", "FRPServer", field="spec.token")  # type: ignore
 @validate_arguments
 def ensure_frp_token(body: FRPServer, new: Optional[FRPServerToken], **kw):
     if new is not None and new.secret:
@@ -63,8 +71,8 @@ def ensure_frp_token(body: FRPServer, new: Optional[FRPServerToken], **kw):
     body.update()
 
 
-@kopf.on.update("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
+@kopf.on.update("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
 @validate_arguments
 def create_frp_server_secret(body: FRPServer, **kw):
     with body.owner():
@@ -150,8 +158,8 @@ def get_frpclient_dashboard_ports(body: FRPClient):
     return ports
 
 
-@kopf.on.field("frp.gou177.cyou/v1", "FRPServer", field="spec.service")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
+@kopf.on.field("frp.nonamestudio.me/v1", "FRPServer", field="spec.service")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
 @validate_arguments
 def create_frp_server_clients_service(body: FRPServer, **kw):
     with body.owner():
@@ -181,8 +189,8 @@ def create_frp_server_clients_service(body: FRPServer, **kw):
             ).upsert()
 
 
-@kopf.on.field("frp.gou177.cyou/v1", "FRPServer", field="spec.dashboard.service")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
+@kopf.on.field("frp.nonamestudio.me/v1", "FRPServer", field="spec.dashboard.service")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
 @validate_arguments
 def create_frp_server_dashboard_service(body: FRPServer, **kw):
     with body.owner():
@@ -196,8 +204,8 @@ def create_frp_server_dashboard_service(body: FRPServer, **kw):
             ).upsert()
 
 
-@kopf.on.field("frp.gou177.cyou/v1", "FRPServer", field="spec.vhost.service")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
+@kopf.on.field("frp.nonamestudio.me/v1", "FRPServer", field="spec.vhost.service")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
 @validate_arguments
 def create_frp_server_vhost_service(body: FRPServer, **kw):
     with body.owner():
@@ -214,26 +222,26 @@ def create_frp_server_vhost_service(body: FRPServer, **kw):
 def get_frpserver_deploy_labels(body: FRPServer):
     return {
         "app": "frp-server",
-        "frpserver.frp.gou177.cyou/name": body.metadata.name,
+        "frpserver.frp.nonamestudio.me/name": body.metadata.name,
     }
 
 
 def get_frpclient_deploy_labels(body: FRPClient):
     return {
         "app": "frp-client",
-        "frpserver.frp.gou177.cyou/name": body.metadata.name,
+        "frpserver.frp.nonamestudio.me/name": body.metadata.name,
     }
 
 
-@kopf.on.update("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPServer")  # type: ignore
+@kopf.on.update("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPServer")  # type: ignore
 @validate_arguments
 def create_frp_server_deploy(body: FRPServer, **kw):
     with body.owner():
         labels = get_frpserver_deploy_labels(body)
         labels.update(
             {
-                "frp.gou177.cyou/config-md5": hashlib.md5(
+                "frp.nonamestudio.me/config-md5": hashlib.md5(
                     body.config().encode()
                 ).hexdigest()
             }
@@ -278,8 +286,8 @@ def create_frp_server_deploy(body: FRPServer, **kw):
         ).upsert()
 
 
-@kopf.on.update("frp.gou177.cyou/v1", "FRPClient")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPClient")  # type: ignore
+@kopf.on.update("frp.nonamestudio.me/v1", "FRPClient")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPClient")  # type: ignore
 @validate_arguments
 def create_frp_client_secret(body: FRPClient, **kw):
     with body.owner():
@@ -292,15 +300,15 @@ def create_frp_client_secret(body: FRPClient, **kw):
         ).upsert()
 
 
-@kopf.on.update("frp.gou177.cyou/v1", "FRPClient")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPClient")  # type: ignore
+@kopf.on.update("frp.nonamestudio.me/v1", "FRPClient")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPClient")  # type: ignore
 @validate_arguments
 def create_frp_client_deploy(body: FRPClient, **kw):
     with body.owner():
         labels = get_frpclient_deploy_labels(body)
         labels.update(
             {
-                "frp.gou177.cyou/config-md5": hashlib.md5(
+                "frp.nonamestudio.me/config-md5": hashlib.md5(
                     body.config().encode()
                 ).hexdigest()
             }
@@ -370,9 +378,9 @@ def create_frp_client_deploy(body: FRPClient, **kw):
         ).upsert()
 
 
-@kopf.on.update("frp.gou177.cyou/v1", "FRPClientEndpoint")  # type: ignore
-@kopf.on.create("frp.gou177.cyou/v1", "FRPClientEndpoint")  # type: ignore
-@kopf.on.resume("frp.gou177.cyou/v1", "FRPClientEndpoint")  # type: ignore
+@kopf.on.update("frp.nonamestudio.me/v1", "FRPClientEndpoint")  # type: ignore
+@kopf.on.create("frp.nonamestudio.me/v1", "FRPClientEndpoint")  # type: ignore
+@kopf.on.resume("frp.nonamestudio.me/v1", "FRPClientEndpoint")  # type: ignore
 @validate_arguments
 def update_endpoints(body: FRPClientEndpointModel, **kw):
     if body.metadata.namespace:
@@ -381,7 +389,7 @@ def update_endpoints(body: FRPClientEndpointModel, **kw):
         )
 
 
-@kopf.on.delete("frp.gou177.cyou/v1", "FRPClientEndpoint")  # type: ignore
+@kopf.on.delete("frp.nonamestudio.me/v1", "FRPClientEndpoint")  # type: ignore
 @validate_arguments
 def delete_endpoint(body: FRPClientEndpointModel, **kw):
     if body.metadata.namespace:
@@ -395,7 +403,6 @@ def delete_endpoint(body: FRPClientEndpointModel, **kw):
 @validate_arguments
 def update_namespaces(body: Namespace, **kw):
     apiserver.namespaces.setdefault(body.metadata.name, body)
-        
 
 
 @kopf.on.delete("namespace", optional=True)  # type: ignore

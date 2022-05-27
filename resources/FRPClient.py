@@ -33,7 +33,7 @@ class FRPClientSpec(BaseModel):
 
 class FRPClient(
     Resource,
-    group="frp.gou177.cyou",
+    group="frp.nonamestudio.me",
     version="v1",
     scope="Namespaced",
 ):

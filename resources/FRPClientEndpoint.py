@@ -127,7 +127,7 @@ class FRPClientEndpointModel(BaseModel):
 
 class FRPClientEndpoint(
     Resource,
-    group="frp.gou177.cyou",
+    group="frp.nonamestudio.me",
     version="v1",
 ):
     spec: FRPClientEndpointSpec

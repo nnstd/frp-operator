@@ -1,9 +1,9 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: frpservers.frp.gou177.cyou
+  name: frpservers.frp.nonamestudio.me
 spec:
-  group: frp.gou177.cyou
+  group: frp.nonamestudio.me
   names:
     kind: FRPServer
     listKind: FRPServerList
@@ -226,9 +226,9 @@ spec:
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: frpclients.frp.gou177.cyou
+  name: frpclients.frp.nonamestudio.me
 spec:
-  group: frp.gou177.cyou
+  group: frp.nonamestudio.me
   names:
     kind: FRPClient
     listKind: FRPClientList
@@ -347,9 +347,9 @@ spec:
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: frpclientendpoints.frp.gou177.cyou
+  name: frpclientendpoints.frp.nonamestudio.me
 spec:
-  group: frp.gou177.cyou
+  group: frp.nonamestudio.me
   names:
     kind: FRPClientEndpoint
     listKind: FRPClientEndpointList
