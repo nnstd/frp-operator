@@ -24,7 +24,7 @@ class FRPClientTarget(BaseModel):
 
 class FRPClientSpec(BaseModel):
     image: str = "snowdreamtech/frpc:latest"
-    sidecarImage: str = "registry.nonamestudio.me/gou177/frp-operator:latest"
+    sidecarImage: str = "ghcr.io/nnstd/frp-operator:master"
     selector: Labels = {}
     namespaceSelector: Optional[Labels] = None
     target: FRPClientTarget

@@ -306,7 +306,7 @@ spec:
                 title: Selector
                 type: object
               sidecarImage:
-                default: registry.nonamestudio.me/gou177/frp-operator:latest
+                default: ghcr.io/nnstd/frp-operator:master
                 title: Sidecarimage
                 type: string
               target:
@@ -472,7 +472,7 @@ spec:
     spec:
       containers:
         - name: operator
-          image: registry.nonamestudio.me/gou177/frp-operator:latest
+          image: ghcr.io/nnstd/frp-operator:master
           command:
             - python
             - '-m'
