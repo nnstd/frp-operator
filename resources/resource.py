@@ -21,6 +21,7 @@ from contextlib import contextmanager
 
 from resources.common import Annotations, Labels, TemplateMetadata
 from copy import deepcopy
+
 DEFAULT = object()
 
 
@@ -112,7 +113,7 @@ class ModelQuery(object):
 class ModelObjectManager(object):
     cls: Type[Resource]
 
-    def __call__(self, namespace: str = None):
+    def __call__(self, namespace: Optional[str] = None):
         api = kubeApi.get()
         if namespace is None and NamespacedAPIObject in getmro(self.cls):
             namespace = api.config.namespace
@@ -162,6 +163,7 @@ def dereference_schema(schema, definitions, parent=None, key=None):
                     dereference_schema(d, definitions, parent=v, key=d)
     return schema
 
+
 def fix_defaults(obj: dict):
     for k, v in obj.copy().items():
         if isinstance(v, dict):
@@ -173,16 +175,20 @@ def fix_defaults(obj: dict):
         if v is None:
             del obj[k]
     return obj
-    
+
+
 def ensure_structural_schema(schema: dict):
     if schema.get("type", None) == "string":
-        if schema.get("enum", None) is not None and schema.get("default", None) is not None:
+        if (
+            schema.get("enum", None) is not None
+            and schema.get("default", None) is not None
+        ):
             schema["enum"].append(schema["default"])
     if schema.get("type") == "object" and schema.get("default", None) is not None:
         fix_defaults(schema)
     if schema.get("type", None) != "object" and schema.get("type", None) is not None:
         return schema
-    
+
     if schema.get("patternProperties", None) is not None:
         patternProperties = schema.pop("patternProperties")
         schema["additionalProperties"] = next(iter(patternProperties.values()))
@@ -277,6 +283,7 @@ class Resource(BaseModel):
         cls, /, group, version, scope="Namespaced", kind=DEFAULT, **kwargs
     ):
         kind = cls.__name__ if kind is DEFAULT else (cls.kind if kind is None else kind)
+        assert isinstance(kind, str)
         cls.__group__ = group
         cls.__version__ = version
         cls.__subresources__ = []
@@ -408,7 +415,7 @@ class Resource(BaseModel):
         )
         self._sync(True)
 
-    def delete(self, propagation_policy: str = None):
+    def delete(self, propagation_policy: Optional[str] = None):
         """
         Delete the Kubernetes resource by calling the API.
 
@@ -416,7 +423,7 @@ class Resource(BaseModel):
         See https://kubernetes.io/docs/concepts/workloads/controllers/garbage-collection/#setting-the-cascading-deletion-policy
         """
         self._sync(True)
-        self._pykube_obj.delete(propagation_policy)
+        self._pykube_obj.delete(propagation_policy)  # type: ignore
 
     def _sync(self, fromPyKube=False):
         if fromPyKube:
@@ -432,7 +439,7 @@ class Resource(BaseModel):
             apiVersion=self.apiVersion,
             kind=self.kind,
             name=self.metadata.name,
-            uid=self.metadata.uid,
+            uid=self.metadata.uid,  # type: ignore
             controller=controller,
             blockOwnerDeletion=blockOwnerDeletion,
         )

@@ -72,15 +72,15 @@ class PodVolumeSecret(BaseModel):
 
 class PodVolume(BaseModel):
     name: str
-    hostPath: Optional[PodVolumeHostPath]
-    configMap: Optional[PodVolumeConfigMap]
-    emptyDir: Optional[Dict]
-    secret: Optional[PodVolumeSecret]
+    hostPath: Optional[PodVolumeHostPath] = None
+    configMap: Optional[PodVolumeConfigMap] = None
+    emptyDir: Optional[Dict] = None
+    secret: Optional[PodVolumeSecret] = None
 
 
 class DeploymentTemplateSpec(TemplateSpec):
     containers: List[PodContainer]
-    initContainers: Optional[List[PodContainer]]
+    initContainers: Optional[List[PodContainer]] = None
     volumes: List[PodVolume] = []
 
 

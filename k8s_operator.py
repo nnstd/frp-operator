@@ -306,6 +306,8 @@ def create_frp_client_deploy(body: FRPClient, **kw):
             }
         )
         ports = get_frpclient_dashboard_ports(body)
+        assert body.metadata.namespace
+
         Deployment(
             metadata=ObjectMeta(
                 name=f"frpc-{body.metadata.name}", namespace=body.metadata.namespace
